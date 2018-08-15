@@ -1,0 +1,30 @@
+{
+  "author": {
+    "name": "Takeshi Toya"
+  },
+  "bugs": {
+    "url": "https://github.com/toyata/collapse/issues"
+  },
+  "dependencies": {
+    
+  },
+  "description": "Toggle the visibility of content across your project ",
+  "devDependencies": {
+    
+  },
+  "homepage": "https://github.com/toyata/collapse",
+  "keywords": [
+    "collapse"
+  ],
+  "license": "MIT",
+  "main": "collapse.js",
+  "name": "tt.collapse",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toyata/collapse.git"
+  },
+  "scripts": {
+    
+  },
+  "version": "0.1.0"
+}
