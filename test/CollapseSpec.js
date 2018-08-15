@@ -25,6 +25,7 @@ describe('Collapse', function() {
       let c = new Collapse(document.getElementById('collapse-1'))
 
       expect(c.el).toEqual(document.getElementById('collapse-1'))
+      expect(document.getElementById('collapse-1').getAttribute('aria-expanded')).toBeNull()
 
       c.el.addEventListener('show', function() {
         expect(c.el.style.height).toBe('0px')
@@ -148,12 +149,15 @@ describe('Collapse', function() {
       expect(c instanceof Collapse).toBeTruthy()
 
       c.el.addEventListener('hidden', () => {
+        expect(triggers[0].getAttribute('aria-expanded')).toBeNull()
+
         Collapse.dispose()
 
         done()
       }, {once:true})
 
       c.el.addEventListener('shown', () => {
+        expect(triggers[0].getAttribute('aria-expanded')).toBe('true')
         triggers[0].dispatchEvent(events.click)
       }, {once:true})
     })

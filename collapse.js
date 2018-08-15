@@ -2,11 +2,12 @@ const Collapse = (() => {
   const _instaces = []
 
   class Collapse {
-    constructor(element, config) {
+    constructor(element, config={}) {
       if (!element || !(element instanceof HTMLElement))
         throw new TypeError('An element must be specified')
 
       this.el = element
+      this._triggers = config.triggers || []
       this._className = element.className
 
       /*
@@ -31,6 +32,8 @@ const Collapse = (() => {
       this.el.classList.remove('collapse')
       this.el.classList.add('collapsing')
       this.el.style.height = 0
+
+      this._triggers.forEach(el => el.setAttribute('aria-expanded', true))
 
       this._emit('show')
 
@@ -59,6 +62,8 @@ const Collapse = (() => {
       this.el.classList.add('collapsing')
       this.el.classList.remove('collapse')
       this.el.classList.remove('show')
+
+      this._triggers.forEach(el => el.removeAttribute('aria-expanded'))
 
       this._emit('hide')
 
@@ -167,10 +172,13 @@ const Collapse = (() => {
 
     dispose() {
       this._off('transitionend', this.el)
+
       this.el.className = this._className
       this.el.style.height = ''
-
       this.el = null
+
+      this._triggers.forEach(el => el.removeAttribute('aria-expanded'))
+      this._triggers = null
 
       return this
     }
@@ -218,6 +226,8 @@ const Collapse = (() => {
         } else if (el.nextElementSibling.classList.contains('collapse')) {
           targets = [el.nextElementSibling]
         }
+
+        config.triggers = [el]
 
         // Kill anchor default behavior
         if (el.tagName === 'A' || el.tagName === 'AREA') {
