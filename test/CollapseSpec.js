@@ -85,13 +85,13 @@ describe('Collapse', function() {
       let c = new Collapse(document.getElementById('collapse-2'))
 
       c.show().then(() => {
-        c.hide()
-
         c.el.addEventListener('hide', () => {
           expect(c.el.classList.contains('show')).toBeFalsy()
           expect(c.el.classList.contains('collapsing')).toBeTruthy()
           expect(Number(c.el.style.height.replace('px', ''))).toEqual(c.el.scrollHeight)
         }, {once: true})
+
+        c.hide()
 
         setTimeout(() => {
           expect(isNaN(Number(window.getComputedStyle(c.el).height.replace('px', '')))).toBeFalsy()
@@ -112,7 +112,6 @@ describe('Collapse', function() {
       })
     })
   })
-
 
   describe('Toggle', function() {
     it('Toggle', function(done) {
@@ -149,7 +148,25 @@ describe('Collapse', function() {
       expect(c instanceof Collapse).toBeTruthy()
 
       c.el.addEventListener('hidden', () => {
-        c.dispose()
+        Collapse.dispose()
+
+        done()
+      }, {once:true})
+
+      c.el.addEventListener('shown', () => {
+        triggers[0].dispatchEvent(events.click)
+      }, {once:true})
+    })
+
+    it('Without target', function(done) {
+      triggers[1].dispatchEvent(events.click)
+
+      let c = Collapse.instance(document.getElementById('collapse-2'))
+
+      expect(c instanceof Collapse).toBeTruthy()
+
+      c.el.addEventListener('hidden', () => {
+        Collapse.dispose()
 
         done()
       }, {once:true})

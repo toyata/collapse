@@ -7,6 +7,7 @@ const Collapse = (() => {
         throw new TypeError('An element must be specified')
 
       this.el = element
+      this._className = element.className
 
       /*
       this._config = this._getConfig(config)
@@ -166,9 +167,7 @@ const Collapse = (() => {
 
     dispose() {
       this._off('transitionend', this.el)
-      this.el.classList.remove('collapse')
-      this.el.classList.remove('collapsing')
-      this.el.classList.remove('show')
+      this.el.className = this._className
       this.el.style.height = ''
 
       this.el = null
@@ -212,14 +211,21 @@ const Collapse = (() => {
       if (e.target == el || el.contains(e.target)) {
         let config = {}
         let selector = el.getAttribute('data-target') && '#' + el.getAttribute('data-target')
+        let targets = []
+
+        if (selector) {
+          targets = Array.from(document.querySelectorAll(selector))
+        } else if (el.nextElementSibling.classList.contains('collapse')) {
+          targets = [el.nextElementSibling]
+        }
 
         // Kill anchor default behavior
         if (el.tagName === 'A' || el.tagName === 'AREA') {
           e.preventDefault()
         }
 
-        // Create modals
-        Array.from(document.querySelectorAll(selector)).forEach(el => Collapse.create(el, config))
+        // Create Collapse
+        targets.forEach(el => Collapse.create(el, config))
       }
     })
   })
