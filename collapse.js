@@ -230,7 +230,7 @@ const Collapse = (() => {
         config.triggers = [el]
 
         // Kill anchor default behavior
-        if (targets.length && (el.tagName === 'A' || el.tagName === 'AREA')) {
+        if (targets.length && (el.tagName.toUpperCase() === 'A' || el.tagName.toUpperCase() === 'AREA')) {
           e.preventDefault()
         }
 
